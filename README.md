@@ -26,7 +26,7 @@ A list of use cases can be found [here](https://github.com/ufosc/club-backend/is
 
 **End with an example of getting some data out of the system or using it for a little demo.**
 
-### Compiling 
+### Compiling
 
 **Give step**
 
@@ -42,14 +42,14 @@ A list of use cases can be found [here](https://github.com/ufosc/club-backend/is
 
 ## Built With
 
-- [Rust](https://www.rust-lang.org/en-US/) - a (wonderful) systems programming language 
+- [Rust](https://www.rust-lang.org/en-US/) - a (wonderful) systems programming language
 - [Rocket Framework](https://rocket.rs/) - a web framework for Rust
 - [PostgreSQL](https://www.postgresql.org/) - an open source relational database
 
 ## Contributing
 
-Please read **[CONTRIBUTING.md](CONTRIBUTING.md)** for how to work on the project.
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) for how to work on the project.
 
 ## License
 
-This project is licensed under the **MIT** License - see the [LICENSE.md](LICENSE.md) file for details.
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
