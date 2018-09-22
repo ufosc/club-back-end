@@ -44,11 +44,11 @@ Check to see if the feature is already <!-- listed in our [TODO.md](docs/TODO.md
 ## Style Guide 
 
 Use our [.editorconfig](.editorconfig) to help automatically format your code. A short list of what we require. 
-<!-- - **Use descriptive names for everything**
-- **Make meaningful comments often**
-- **Indent with tabs, use spaces everywhere else**
-- **Put curly braces on a new line**
-- **Keep line length under 100 characters** -->
+- Use descriptive names for everything
+- Make meaningful comments often
+- Indent with tabs, use spaces everywhere else
+- Put curly braces on a new line
+- Keep line length under 100 characters
 
 For a longer more descriptive list, check out our club's [general style guidelines](https://github.com/ufosc/resources/blob/master/coding-guidelines/general-style.md).
 
