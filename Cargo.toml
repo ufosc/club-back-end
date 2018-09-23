@@ -1,0 +1,9 @@
+[package]
+name = "club-backend"
+version = "0.1.0"
+authors = ["Hunter Jarrell <hjarrell555@gmail.com>"]
+
+[dependencies]
+rocket = "0.3.16"
+rocket_codegen = "0.3.16"
+diesel = { version = "<= 1.2", features = ["sqlite", "postgres", "r2d2"] }
