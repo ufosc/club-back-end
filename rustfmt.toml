@@ -1,0 +1,16 @@
+# Hard tabs forces tabs for indents, and spaces for formatting. 
+hard_tabs = true
+
+# Sets maximum line width, default is 100 but just keeping this in for clarity. 
+max_width = 100
+
+# Blank lines upper bound sets the maximum amount of blank lines between lines. If it goes over, 
+#empty lines will be trimmed until it's at the upper bound
+blank_lines_upper_bound = 2
+
+# Ignore function for ignoring specific files within the directory. To add a file to ignore,
+#simply add its path and file name in quotations between the brackets. Useful for non .rs files.  
+#example: "src/types.rs"
+ignore = [
+
+]
