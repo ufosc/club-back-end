@@ -1,22 +1,14 @@
-FROM buildpack-deps:stretch
+FROM rustlang/rust:nightly
 
-ENV RUSTUP_HOME=/usr/local/rustup \
-    CARGO_HOME=/usr/local/cargo \
-    PATH=/usr/local/cargo/bin:$PATH \
-    DATABASE_URL='sqlite'
-
-
-WORKDIR /usr/src/backend
+WORKDIR /club-backend
 
 COPY . .
 
-# Install rust nightly
-RUN curl https://sh.rustup.rs -sSf | sh -s -- -y && rustup default nightly && rustup update nightly
+ENV DATABASE_URL=postgres://osc:stallman@db/osc \
+    ROCKET_ENV=development
 
-# Put the cargo build in a seperate run command so that we don't have to install rustup again if
-# the build fails
 RUN cargo build
 
-EXPOSE 8000
+EXPOSE 3001
 
 CMD cargo run

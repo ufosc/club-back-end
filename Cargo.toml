@@ -7,3 +7,4 @@ authors = ["Hunter Jarrell <hjarrell555@gmail.com>"]
 rocket = "0.3.16"
 rocket_codegen = "0.3.16"
 diesel = { version = "<= 1.2", features = ["sqlite", "postgres", "r2d2"] }
+diesel_migrations = "1.2"

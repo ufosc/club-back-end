@@ -1,3 +1,6 @@
+#![feature(plugin)]
+#![plugin(rocket_codegen)]
+
 extern crate rocket;
 #[macro_use] extern crate diesel;
 
@@ -16,8 +19,14 @@ fn init_pool() -> PgPool {
     Pool::new(manager).expect("db pool")
 }
 
+#[get("/")]
+fn index() -> &'static str {
+    "Hello, world!"
+}
+
 fn main() {
     rocket::ignite()
         .manage(init_pool())
+		.mount("/", routes![index])
         .launch();
 }
