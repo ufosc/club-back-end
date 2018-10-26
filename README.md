@@ -4,39 +4,31 @@ A RESTful API for club information (events, projects, sign-ins, etc) that is use
 
 A list of use cases can be found [here](https://github.com/ufosc/club-backend/issues/2).
 
-<!-- ## Getting Started
+## Getting Started
 
-**A detailed instruction list on what to install and configure to start working on the project.**
+We will use Docker to develop and deploy the code.
 
 ### Installing
 
-**Step by step guide**
+Install [Docker](https://docs.docker.com/install/linux/docker-ce/ubuntu/) and [Docker compose](https://docs.docker.com/compose/install/).
 
-**Give step**
+### Running
 
-```
-**code to run**
-```
+To run the app
 
-**Next step**
-
-```
-**code to run**
+```bash
+docker-compose up
 ```
 
-**End with an example of getting some data out of the system or using it for a little demo.**
+And go to [localhost:3001](http://localhost:3001/).
 
-### Compiling
+To run updated code, you can press "Ctrl-C" in the terminal or type
 
-**Give step**
-
-```
-**code to run**
+```bash
+docker-compose down
 ```
 
-**End with an example of getting some data out of the system or using it for a little demo.**
-
-## Deployment
+<!-- ## Deployment
 
 **Additional steps to deploy and run the project** -->
 

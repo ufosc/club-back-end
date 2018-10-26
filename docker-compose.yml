@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  backend:
+    build: .
+    environment:
+      - DATABASE_URL=postgres://osc:stallman@db/osc
+      - ROCKET_ENV=development
+    ports:
+      - "3001:3001"
+    volumes:
+      - .:/club-backend
+    depends_on:
+      - db
+  db:
+    image: postgres
+    volumes:
+      - ./db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=osc
+      - POSTGRES_PASSWORD=stallman
