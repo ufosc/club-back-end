@@ -4,10 +4,10 @@ WORKDIR /club-backend
 
 COPY . .
 
-ENV DATABASE_URL=postgres://osc:stallman@db/osc \
-    ROCKET_ENV=development
-
 RUN cargo build
+
+RUN cargo install diesel_cli --no-default-features --features postgres && \
+		diesel setup
 
 EXPOSE 3001
 

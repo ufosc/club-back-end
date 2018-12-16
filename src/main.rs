@@ -1,22 +1,26 @@
-#![feature(plugin)]
-#![plugin(rocket_codegen)]
+#![feature(proc_macro_hygiene, decl_macro)]
 
-extern crate rocket;
-#[macro_use] extern crate diesel;
+#[macro_use] extern crate rocket;
+#[macro_use] extern crate rocket_contrib;
+// #[macro_use] extern crate diesel;
+#[macro_use] extern crate dotenv;
 
+use rocket_contrib::databases::diesel;
+use diesel::prelude::*;
 use diesel::pg::PgConnection;
-use diesel::r2d2::{ConnectionManager, Pool, PooledConnection};
+use dotenv::dotenv;
+use std::env;
 
-// An alias to the type for a pool of Diesel SQLite connections.
-type PgPool = Pool<ConnectionManager<PgConnection>>;
+#[database("club_data")]
+struct ClubDbConn(diesel::PgConnection);
 
-// The URL to the database, set via the `DATABASE_URL` environment variable.
-static DATABASE_URL: &'static str = env!("DATABASE_URL");
+pub fn establish_connection() -> PgConnection {
+    dotenv().ok();
 
-/// Initializes a database pool.
-fn init_pool() -> PgPool {
-    let manager = ConnectionManager::<PgConnection>::new(DATABASE_URL);
-    Pool::new(manager).expect("db pool")
+    let database_url = env::var("DATABASE_URL")
+        .expect("DATABASE_URL must be set");
+    PgConnection::establish(&database_url)
+        .expect(&format!("Error connecting to {}", database_url))
 }
 
 #[get("/")]
@@ -26,7 +30,7 @@ fn index() -> &'static str {
 
 fn main() {
     rocket::ignite()
-        .manage(init_pool())
+		.attach(ClubDbConn::fairing())
 		.mount("/", routes![index])
-        .launch();
+		.launch();
 }

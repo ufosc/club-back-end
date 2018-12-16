@@ -3,9 +3,6 @@ version: '3'
 services:
   backend:
     build: .
-    environment:
-      - DATABASE_URL=postgres://osc:stallman@db/osc
-      - ROCKET_ENV=development
     ports:
       - "3001:3001"
     volumes:
