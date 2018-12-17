@@ -7,3 +7,6 @@ log = "normal"
 address = "0.0.0.0"
 port = 3001
 log = "critical"
+
+[global.databases]
+club_data = { url = "postgres://osc:stallman@db/osc" }
