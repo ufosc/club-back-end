@@ -2,7 +2,7 @@
 
 ## Background
 
-With some insight from this [Rust Web Starter project](https://github.com/ghotiphud/rust-web-starter) the Dockerfile and docker-compose were edited to connect to the database properly, to not re-install cargo packages each time docker-compose is run, to automatically re-compile code changes, and to use the diesel CLI.
+With some insight from this [Rust Web Starter project](https://github.com/ghotiphud/rust-web-starter) the Dockerfile and docker-compose were edited to connect to the database properly, to not re-install cargo packages each time docker-compose is run, to automatically re-compile code changes, and to use the Diesel CLI.
 
 ## Docker Compose
 
@@ -18,9 +18,15 @@ Sometimes docker-compose leaves behind ports, volumes, etc. This can interfere w
 docker-compose down -v
 ```
 
+## Rust Tools
+
+Rust has a code formatting tool called Rustfmt, which allows us to define a style and have it easily enforced. All you need to do is run `cargo fmt` (as described below) and all the source code in this project will be updated to match our style guidelines!
+
+Clippy is a smart linter for Rust that can be run as an extra check on the code in the project. By default it checks all the dependencies and the source code, before only checking changes. It can be run by using `cargo clippy` (as described below).
+
 ## Additional Commands
 
-The [diesel CLI](http://diesel.rs/) is designed to help create databases, change the databases properties (called migrations), and undo migrations if there is an issue (all while keeping the data safe).
+The [Diesel CLI](http://diesel.rs/) is designed to help create databases, change the databases properties (called migrations), and undo migrations if there is an issue (all while keeping the data safe).
 
 So to run these commands first start the instance with
 
@@ -34,8 +40,10 @@ and then in a new terminal jump into that containers shell by
 docker-compose exec backend bash
 ```
 
-From there all normal diesel or rust maintenance commands can be run. Please go to the official documentation for details, a list of commonly used commands are below.
+From there all normal Diesel or Rust maintenance commands can be run. Please go to the official documentation for details, a list of commonly used commands are below.
 - `cargo upgrade`
+- `cargo fmt`
+- `cargo clippy`
 - `diesel setup`
 - `diesel migration generate {name}`
 - `diesel migration run`
