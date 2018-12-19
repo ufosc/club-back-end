@@ -1,5 +1,7 @@
 # Club Backend
 
+[![Build Status](https://travis-ci.com/ufosc/club-backend.svg?branch=dev)](https://travis-ci.com/ufosc/club-backend)
+
 A RESTful API for club information (events, projects, sign-ins, etc) that is used for the club website, bots, and any future projects related to administration.
 
 A list of use cases can be found [here](https://github.com/ufosc/club-backend/issues/2).
