@@ -8,9 +8,9 @@ CREATE TABLE member (
 	github_username TEXT DEFAULT '',
 	server_username TEXT DEFAULT '',
 	server_key TEXT DEFAULT '',
-	is_acm_shareable BOOLEAN,
+	is_acm_shareable BOOLEAN DEFAULT FALSE,
 	is_in_email_list BOOLEAN DEFAULT FALSE
-)
+);
 
 -- Create an event table
 CREATE TABLE event (
@@ -20,11 +20,11 @@ CREATE TABLE event (
 	description TEXT DEFAULT '',
 	end_timestamp TIMESTAMPTZ NOT NULL, -- Events must have an end time
 	image BYTEA DEFAULT '\000'-- Image binary defaults to 0
-)
+);
 
 -- Create a many to many attendance table
 CREATE TABLE attendance (
 	ufl_username TEXT REFERENCES member,
 	start_timestamp TIMESTAMPTZ REFERENCES event,
 	PRIMARY KEY (ufl_username, start_timestamp)
-)
+);
