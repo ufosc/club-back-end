@@ -41,8 +41,9 @@ docker-compose exec backend bash
 ```
 
 From there all normal Diesel or Rust maintenance commands can be run. Please go to the official documentation for details, a list of commonly used commands are below.
-- `cargo upgrade`
 - `cargo fmt`
+- `cargo test -- --test-threads=1`
+- `cargo upgrade`
 - `cargo clippy`
 - `diesel setup`
 - `diesel migration generate {name}`
