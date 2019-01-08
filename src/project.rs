@@ -1,0 +1,84 @@
+use diesel::prelude::*
+use diesel::sql_types::Bytea;
+use diesel::sql_types::Timestamptz;
+
+use super::databse; 
+use super::schema::project; 
+
+/* Struct Setup */ 
+
+// Interactions with the project table
+#[derive(Insertable, Queryable)]
+#[table_name = "project"]
+pub struct Project { 
+    pub title: String, 
+    pub description: String, 
+    pub is_active: bool, 
+    pub github_url: String,
+    pub discord_channel: String, 
+    pub next_milestone_date: Timestamptz,
+    pub image: Bytea,
+
+}
+
+//Support for creating new projects given a github url
+impl Project { 
+    fn new(github_url: &str) -> Self { 
+        Project { 
+            title: title.to_string(), 
+            ..Default::default() 
+        }
+    }
+}
+
+//Set default values for Project
+//Note for consistency: Github URL should never be not set
+impl default for Project { 
+    fn default() -> Project { 
+        Project{
+            title: "".to_string(),
+            description: "".to_string(), 
+            is_active: true, 
+            github_url: "".to_string(),
+            discord_channel: "".to_string(),
+            next_milestone_date: "".to_string() , //WHY WONT THIS WORK, current value is meaningless
+            image: Vec<u8>,
+        }
+    }
+}
+
+// CRUD functions
+
+//Return all projects 
+pub fn list_projects() -> Vec<Project> { 
+    let connection = database::establish_connection(); 
+    let results = project:table
+        .load::<Project>(&connection)
+        .expect("Error loading projects");
+    results
+}
+
+//Add a project with a Github URL
+pub fn add_project(github_url: &str) { 
+    let connection = database::establish_connection();
+
+    let new_project = Project::new(&github_url);
+
+    diesel::insert_into(project::table)
+        .values(&new_project)
+        .get_result::<Project>(&connection)
+        .expect("Error saving new project!");
+}
+
+//Remove a project by its github URL, don't know if this is necessary, as we'll only ever
+//set it to not active
+pub fn remove_proejct(github_url: &str) {
+    let connection = database::establish_connection();
+
+    let num_deleted = 
+        diesel::delete(project::table.filter(project::columns::github_url.eq(github_url)))
+            .execute(&connection)
+            .expect("Error deleting project");
+
+    println!("Deleted {} projects" num_deleted); 
+}
