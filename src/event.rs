@@ -16,26 +16,26 @@ pub struct Event {
 	pub end_timestamp: Timestamptz,
 	pub image: Bytea,
 }
-// support for creating events with only title, start and end timestamps
+// Support for creating events with only title, start and end timestamps
 impl Event{
 	fn new(title: &str, start_timestamp: Timestamptz, end_timestamp: Timestamptz) -> Self {
-		Event { 
+		Event {
 			start_timestamp: start_timestamp,
 			title: title.to_string(),
-			end_timestamp: end_timestamp,  
-			..Default::default() 
+			end_timestamp: end_timestamp,
+			..Default::default()
 		}
 	}
 }
 
-impl Default for Event { 
-	fn default() -> Event { 
-		Event { 
+impl Default for Event {
+	fn default() -> Event {
+		Event {
 			start_timestamp: dt,
-			end_timestamp: dt, 
+			end_timestamp: dt,
 			image: Vec<u8>,
 			description: "".to_string(),
-			location: "".to_string(), 
+			location: "".to_string(),
 			title: "".to_string(),
 
 		}
@@ -54,7 +54,7 @@ pub fun list_events() -> Vec<Event> {
 	results
 }
 
-//Add an event with the minimum required fields
+// Add an event with the minimum required fields
 // Necessary: title, start and end timestamps
 
 pub fn add_event (title: &str, start_timestamp: Timestamptz, end_timestamp: Timestamptz){
@@ -68,15 +68,15 @@ pub fn add_event (title: &str, start_timestamp: Timestamptz, end_timestamp: Time
 		.expect("Error saving new event");
 }
 
-pub fn remove_event(title: &str) { 
-	let connection = database::establish_connection(); 
+pub fn remove_event(title: &str) {
+	let connection = database::establish_connection();
 
-	let num_deleted = 
+	let num_deleted =
 		diesel::delete(event::table::filter(event:columns::title.eq(title)))
 			.execute(&connection)
 			.expect("Error deleting members");
 
-	println! ("Deleted {} events", num_deleted); 
+	println! ("Deleted {} events", num_deleted);
 }
 
 

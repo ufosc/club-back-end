@@ -4,7 +4,7 @@ version = "0.1.0"
 authors = ["Hunter Jarrell <hjarrell555@gmail.com>"]
 
 [dependencies]
-rocket = "0.4.0"rust default
+rocket = "0.4.0"
 diesel = { version = "1.3", features = ["postgres", "r2d2"] }
 diesel_migrations = "1.3"
 chrono = "0.4"

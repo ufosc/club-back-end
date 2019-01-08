@@ -31,15 +31,6 @@ table! {
 	}
 }
 
-table! { 
-	project (title){
-		title -> Text,
-		description -> Text, 
-		is_active -> Bool,
-		github_url -> Text, 
-	}
-}
-
 joinable!(attendance -> event (start_timestamp));
 joinable!(attendance -> member (ufl_username));
 
