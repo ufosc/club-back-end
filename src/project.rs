@@ -21,11 +21,11 @@ pub struct Project {
     pub image: Bytea,
 }
 
-//Support for creating new projects given a github url
+// Support for creating new projects given a github url
 impl Project {
     fn new(github_url: &str) -> Self {
         Project {
-            title: title.to_string(),
+            github_url: github_url.to_string(),
             ..Default::default()
         }
     }
@@ -36,7 +36,7 @@ impl Project {
 impl default for Project {
     fn default() -> Project {
         Project{
-            title: "".to_string(),
+            name: "".to_string(),
             description: "".to_string(),
             is_active: true,
             github_url: "".to_string(),
@@ -82,3 +82,8 @@ pub fn remove_proejct(github_url: &str) {
 
     println!("Deleted {} projects" num_deleted);
 }
+
+// TODO: Be able to find modify a project. Find it by the github_url and let them pass in all the values
+// Note: Might want to consider a way of specfying only certain values to change. Might need a macro or something
+
+// TODO: Add unit tests

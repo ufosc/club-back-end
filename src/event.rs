@@ -6,7 +6,6 @@ use super::database;
 use super::schema::event;
 use chrono::{NaiveDate, NaiveDateTime};
 
-
 #[derive(Queryable)]
 pub struct Event {
 	pub start_timestamp: Timestamptz,
@@ -16,7 +15,8 @@ pub struct Event {
 	pub end_timestamp: Timestamptz,
 	pub image: Bytea,
 }
-// Support for creating events with only title, start and end timestamps
+
+// Support for creating events with only title, start, and end timestamps
 impl Event{
 	fn new(title: &str, start_timestamp: Timestamptz, end_timestamp: Timestamptz) -> Self {
 		Event {
@@ -37,11 +37,9 @@ impl Default for Event {
 			description: "".to_string(),
 			location: "".to_string(),
 			title: "".to_string(),
-
 		}
 	}
 }
-
 
 // CRUD functions
 
@@ -56,8 +54,7 @@ pub fun list_events() -> Vec<Event> {
 
 // Add an event with the minimum required fields
 // Necessary: title, start and end timestamps
-
-pub fn add_event (title: &str, start_timestamp: Timestamptz, end_timestamp: Timestamptz){
+pub fn add_event(title: &str, start_timestamp: Timestamptz, end_timestamp: Timestamptz){
 	let connection = database::establish_connection();
 
 	let new_event = Event::new(&title, start_timestamp, end_timestamp);
@@ -79,4 +76,7 @@ pub fn remove_event(title: &str) {
 	println! ("Deleted {} events", num_deleted);
 }
 
+// TODO: Be able to find modify an event. Find it by the start_timestamp and let them pass in all the values
+// Note: Might want to consider a way of specfying only certain values to change. Might need a macro or something
 
+// TODO: Add unit tests

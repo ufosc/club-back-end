@@ -85,6 +85,9 @@ pub fn remove_member(ufl_username: &str) {
 	println!("Deleted {} members", num_deleted);
 }
 
+// TODO: Be able to find modify a member. Find it by the ufl_username and let them pass in all the member values
+// Note: Might want to consider a way of specfying only certain values to change. Might need a macro or something
+
 /* Unit testing */
 
 // Note: Do run the test as `cargo test -- --test-threads=1` to run the database calls in order
