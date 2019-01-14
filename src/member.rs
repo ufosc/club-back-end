@@ -50,7 +50,7 @@ impl Default for Member {
 	}
 }
 
-/* CRUD and other functions */
+/* CRUD functions */
 
 // Return all members
 pub fn list_members() -> Vec<Member> {
@@ -85,8 +85,29 @@ pub fn remove_member(ufl_username: &str) {
 	println!("Deleted {} members", num_deleted);
 }
 
+/* Other Function */
+pub fn does_member_exist(ufl_username: &str) -> bool {
+	let connection = database::establish_connection();
+
+	let result = member::table
+		.filter(member::ufl_username.eq(&ufl_username))
+		.load::<Member>(&connection);
+	match result {
+		Ok(v) => {
+			for member in v {
+				if member.ufl_username.eq(&ufl_username) {
+					return true
+				}
+			}
+			false
+		},
+		Err(_e) => false,
+	}
+	// result.contains(&ufl_username)
+}
+
 // TODO: Be able to find modify a member. Find it by the ufl_username and let them pass in all the member values
-// Note: Might want to consider a way of specfying only certain values to change. Might need a macro or something
+// Note: Might want to consider a way of specifying only certain values to change. Might need a macro or something
 
 /* Unit testing */
 
@@ -119,7 +140,7 @@ mod tests {
 		assert_eq!(Vec::len(&list_members()), 1);
 	}
 
-	// Check that two members exist agter they are both created
+	// Check that two members exist after they are both created
 	#[test]
 	fn two_member() {
 		clear_table();
@@ -128,13 +149,29 @@ mod tests {
 		assert_eq!(Vec::len(&list_members()), 2);
 	}
 
-	// Checl that a single member can be deleted after being created
+	// Check that a single member can be deleted after being created
 	#[test]
 	fn delete_member() {
 		clear_table();
 		add_member("delete_member_test@email.com");
 		remove_member("delete_member_test@email.com");
 		assert_eq!(Vec::len(&list_members()), 0);
+	}
+
+	#[test]
+	// Check to see if a member exits after being added
+	fn member_exist() {
+		clear_table();
+		add_member("member_exist_test@email.com");
+		assert_eq!(does_member_exist("member_exist_test@email.com"), true);
+	}
+
+	#[test]
+	// Check to see if a member exists without being added
+	fn member_does_not_exist() {
+		clear_table();
+		add_member("member_does_not_exist_test@email.com");
+		assert_eq!(does_member_exist("member_exist_test@email.com"), false);
 	}
 
 }
