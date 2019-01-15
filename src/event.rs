@@ -6,7 +6,8 @@ use super::database;
 use super::schema::event;
 use chrono::prelude::*;
 
-#[derive(Queryable)]
+#[derive(Insertable, Queryable)]
+#[table_name = "event"]
 pub struct Event {
 	pub start_timestamp: DateTime<Utc>,
 	pub title: String,
@@ -18,7 +19,7 @@ pub struct Event {
 
 // Support for creating events with only title, start, and end timestamps
 impl Event{
-	fn new(title: &str, start_timestamp: DateTime<Utc>, end_timestamp: ) -> Self {
+	fn new(title: &str, start_timestamp: DateTime<Utc>, end_timestamp: DateTime<Utc>) -> Self {
 		Event {
 			start_timestamp: start_timestamp,
 			title: title.to_string(),
@@ -33,7 +34,7 @@ impl Default for Event {
 		Event {
 			start_timestamp: Utc::now(),
 			end_timestamp: Utc::now(),
-			image: Vec[0u8, 1, 2, 3, 4, 5, 6, 7],
+			image: Vec::new(),
 			description: "".to_string(),
 			location: "".to_string(),
 			title: "".to_string(),
@@ -54,14 +55,14 @@ pub fn list_events() -> Vec<Event> {
 
 // Add an event with the minimum required fields
 // Necessary: title, start and end timestamps
-pub fn add_event(title: &str, start_timestamp: Timestamptz, end_timestamp: Timestamptz){
+pub fn add_event(title: &str, start_timestamp: DateTime<Utc>, end_timestamp: DateTime<Utc>){
 	let connection = database::establish_connection();
 
 	let new_event = Event::new(&title, start_timestamp, end_timestamp);
 
 	diesel::insert_into(event::table)
 		.values(&new_event)
-		.get_result::<Event>(&conenction)
+		.get_result::<Event>(&connection)
 		.expect("Error saving new event");
 }
 
@@ -69,7 +70,7 @@ pub fn remove_event(title: &str) {
 	let connection = database::establish_connection();
 
 	let num_deleted =
-		diesel::delete(event::table::filter(event::columns::title.eq(title)))
+		diesel::delete(event::table.filter(event::columns::title.eq(title)))
 			.execute(&connection)
 			.expect("Error deleting members");
 
