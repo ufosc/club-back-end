@@ -4,21 +4,21 @@ use diesel::sql_types::Timestamptz;
 
 use super::database;
 use super::schema::event;
-use chrono::{NaiveDate, NaiveDateTime};
+use chrono::prelude::*;
 
 #[derive(Queryable)]
 pub struct Event {
-	pub start_timestamp: Timestamptz,
+	pub start_timestamp: DateTime<Utc>,
 	pub title: String,
 	pub location: String,
 	pub description: String,
-	pub end_timestamp: Timestamptz,
-	pub image: Bytea,
+	pub end_timestamp: DateTime<Utc>,
+	pub image: Vec<u8>,
 }
 
 // Support for creating events with only title, start, and end timestamps
 impl Event{
-	fn new(title: &str, start_timestamp: Timestamptz, end_timestamp: Timestamptz) -> Self {
+	fn new(title: &str, start_timestamp: DateTime<Utc>, end_timestamp: ) -> Self {
 		Event {
 			start_timestamp: start_timestamp,
 			title: title.to_string(),
@@ -31,9 +31,9 @@ impl Event{
 impl Default for Event {
 	fn default() -> Event {
 		Event {
-			start_timestamp: dt,
-			end_timestamp: dt,
-			image: Vec<u8>,
+			start_timestamp: Utc::now(),
+			end_timestamp: Utc::now(),
+			image: Vec[0u8, 1, 2, 3, 4, 5, 6, 7],
 			description: "".to_string(),
 			location: "".to_string(),
 			title: "".to_string(),
@@ -44,7 +44,7 @@ impl Default for Event {
 // CRUD functions
 
 // Return a list of all events
-pub fun list_events() -> Vec<Event> {
+pub fn list_events() -> Vec<Event> {
 	let connection = database::establish_connection();
 	let results = event::table
 		.load::<Event>(&connection)
@@ -69,7 +69,7 @@ pub fn remove_event(title: &str) {
 	let connection = database::establish_connection();
 
 	let num_deleted =
-		diesel::delete(event::table::filter(event:columns::title.eq(title)))
+		diesel::delete(event::table::filter(event::columns::title.eq(title)))
 			.execute(&connection)
 			.expect("Error deleting members");
 
