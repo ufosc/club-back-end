@@ -32,6 +32,20 @@ To run updated code, you can press "Ctrl-C" in the terminal or type
 docker-compose down
 ```
 
+### Testing
+
+To run the unit test, you'll need to get into the Docker container
+
+```bash
+docker-compose exec backend bash
+```
+
+then run tests single threaded (needed to make sure to keep the database in the right state)
+
+```bash
+cargo test -- --test-threads=1
+```
+
 <!-- ## Deployment
 
 **Additional steps to deploy and run the project** -->

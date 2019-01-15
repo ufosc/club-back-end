@@ -8,12 +8,13 @@ extern crate rocket;
 extern crate rocket_contrib;
 #[macro_use]
 extern crate diesel;
+extern crate chrono;
 
 // Utility local dependencies
 mod database;
 mod schema;
 
-// Table specifc local dependencies
+// Table specific local dependencies
 mod attendance;
 mod event;
 mod member;
@@ -28,7 +29,7 @@ fn index() -> &'static str {
 fn main() {
 	rocket::ignite()
 		.attach(database::ClubDbConn::fairing())
-		// Note: Be sure to mount all the routes from differnt modules
+		// Note: Be sure to mount all the routes from different modules
 		.mount("/", routes![index])
 		.launch();
 }

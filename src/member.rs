@@ -96,11 +96,11 @@ pub fn does_member_exist(ufl_username: &str) -> bool {
 		Ok(v) => {
 			for member in v {
 				if member.ufl_username.eq(&ufl_username) {
-					return true
+					return true;
 				}
 			}
 			false
-		},
+		}
 		Err(_e) => false,
 	}
 	// result.contains(&ufl_username)
