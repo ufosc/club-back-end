@@ -31,6 +31,19 @@ table! {
 	}
 }
 
+table! { 
+	project (github_url){
+		title -> Text,
+		description -> Text, 
+		is_active -> Bool,
+		github_url -> Text, //Extern crate URL? Seems more appropriate. Parses &str to a URL type, useful methods. 
+		discord_channel -> Text,
+		next_milestone_date -> Timestamptz,
+		image -> Bytea,
+
+	}
+}
+
 joinable!(attendance -> event (start_timestamp));
 joinable!(attendance -> member (ufl_username));
 
