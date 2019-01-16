@@ -62,15 +62,15 @@ pub fn list_members() -> Vec<Member> {
 }
 
 // Add a member with a UFL username
-pub fn add_member(ufl_username: &str) {
+pub fn add_member(ufl_username: &str) -> &Member {
 	let connection = database::establish_connection();
 
 	let new_member = Member::new(&ufl_username);
 
-	diesel::insert_into(member::table)
+	&diesel::insert_into(member::table)
 		.values(&new_member)
 		.get_result::<Member>(&connection)
-		.expect("Error saving new member");
+		.expect("Error saving new member")
 }
 
 // Remove a member by their username
@@ -86,24 +86,22 @@ pub fn remove_member(ufl_username: &str) {
 }
 
 /* Other Function */
-pub fn does_member_exist(ufl_username: &str) -> bool {
+// pub fn fetch_member<'a>(ufl_username: &'a str) -> &'a Option<Member> {
+pub fn fetch_member(ufl_username: &str) -> Option<Member> {
 	let connection = database::establish_connection();
 
-	let result = member::table
+	// There should only be one match if it exits
+	let &result = &member::table
 		.filter(member::ufl_username.eq(&ufl_username))
+		.limit(1)
 		.load::<Member>(&connection);
+
+	// Either return the value or nothing
 	match result {
-		Ok(v) => {
-			for member in v {
-				if member.ufl_username.eq(&ufl_username) {
-					return true;
-				}
-			}
-			false
-		}
-		Err(_e) => false,
+		// Ok(v) => v.iter().nth(0),
+		Ok(v) => v.iter().nth(0).copy(),
+		Err(_e) => None,
 	}
-	// result.contains(&ufl_username)
 }
 
 // TODO: Be able to find modify a member. Find it by the ufl_username and let them pass in all the member values

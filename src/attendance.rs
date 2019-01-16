@@ -3,7 +3,7 @@ use diesel::prelude::*;
 use chrono::{DateTime, Utc};
 
 use super::database;
-use super::member::{does_member_exist, add_member};
+use super::member::{fetch_member, add_member};
 use super::schema::attendance;
 
 #[derive(Insertable, Queryable)]
@@ -13,7 +13,7 @@ pub struct Attendance {
 	pub start_timestamp: DateTime<Utc>,
 }
 
-enum SignInResponse {
+pub enum SignInResponse {
 	Succsess,
 	SuccsessNewMember,
 	NoEvent,
@@ -33,14 +33,17 @@ Logic for sign in:
 
 	d. Finally, if there is an event and the student has not already signed in, an entry with both the student and event are added into the attendance table. If there isn't an event, it will return a response saying so and not record anything in the attendance table. If the student is new, it will send a response prompting for more information (and will always ask for more information if the is_info_filled_out flag is till up). If they have already signed in, return a response saying so.
 */
-/* pub fn sign_in(ufl_username: &str) -> SignInResponse {
+pub fn sign_in(ufl_username: &str) -> SignInResponse {
 	let connection = database::establish_connection();
 
-	let memberExist = does_member_exist(&ufl_username);
-	if memberExist == false {
-		add_member(&ufl_username);
-	}
-} */
+	let member = match fetch_member(&ufl_username) {
+		Some(theMember) => theMember,
+		None => add_member(ufl_username),
+	};
+
+	SignInResponse::AlreadySignedIn
+
+}
 
 // TODO: Remove faulty sign-ins
 
