@@ -3,7 +3,9 @@
 use diesel::prelude::*;
 
 use super::database;
-use super::schema::officer; 
+use super::schema::officer;
+
+use chrono::NaiveDateTime;
 
 /* Setting the roles enum first for tidiness */ 
 
