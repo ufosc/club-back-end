@@ -38,7 +38,7 @@ docker-compose down
 
 ## Built With
 
-- [Rust](https://www.rust-lang.org/en-US/) - a (wonderful) systems programming language
+- [Rust](https://www.rust-lang.org/learn/get-started) - a (wonderful) systems programming language
 - [Rocket Framework](https://rocket.rs/) - a web framework for Rust
 - [PostgreSQL](https://www.postgresql.org/) - an open source relational database
 - [Diesel](http://diesel.rs/) - An extensible ORM and Query Builder for Rust (to interact with PostgreSQL)
