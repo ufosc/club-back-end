@@ -1,13 +1,13 @@
 use diesel::prelude::*;
 
 use super::database;
-use super::schema::member;
+use super::schema::members;
 
 /* Struct Setup */
 
 // Struct for interacting with the member table
 #[derive(Insertable, Queryable)]
-#[table_name = "member"]
+#[table_name = "members"]
 pub struct Member {
 	pub ufl_username: String,
 	pub is_info_filled_out: bool,
@@ -55,7 +55,7 @@ impl Default for Member {
 // Return all members
 pub fn list_members() -> Vec<Member> {
 	let connection = database::establish_connection();
-	let results = member::table
+	let results = members::table
 		.load::<Member>(&connection)
 		.expect("Error loading members");
 	results
@@ -67,7 +67,7 @@ pub fn add_member(ufl_username: &str) {
 
 	let new_member = Member::new(&ufl_username);
 
-	diesel::insert_into(member::table)
+	diesel::insert_into(members::table)
 		.values(&new_member)
 		.get_result::<Member>(&connection)
 		.expect("Error saving new member");
@@ -78,7 +78,7 @@ pub fn remove_member(ufl_username: &str) {
 	let connection = database::establish_connection();
 
 	let num_deleted =
-		diesel::delete(member::table.filter(member::columns::ufl_username.eq(ufl_username))) //.like(ufl_username)))
+		diesel::delete(members::table.filter(members::columns::ufl_username.eq(ufl_username))) //.like(ufl_username)))
 			.execute(&connection)
 			.expect("Error deleting members");
 
@@ -96,7 +96,7 @@ mod tests {
 	fn clear_table() {
 		let connection = database::establish_connection();
 
-		diesel::delete(member::table)
+		diesel::delete(members::table)
 			.execute(&connection)
 			.expect("Error deleting all members");
 	}
