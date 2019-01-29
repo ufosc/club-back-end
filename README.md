@@ -1,10 +1,10 @@
-# Club Backend
+# Club Back-End
 
-[![Build Status](https://travis-ci.com/ufosc/club-backend.svg?branch=dev)](https://travis-ci.com/ufosc/club-backend)
+[![Build Status](https://travis-ci.com/ufosc/club-back-end.svg?branch=dev)](https://travis-ci.com/ufosc/club-back-end)
 
 A RESTful API for club information (events, projects, sign-ins, etc) that is used for the club website, bots, and any future projects related to administration.
 
-A list of use cases can be found [here](https://github.com/ufosc/club-backend/issues/2).
+A list of use cases can be found [here](https://github.com/ufosc/club-back-end/issues/2).
 
 ## Getting Started
 
@@ -38,14 +38,14 @@ docker-compose down
 
 ## Built With
 
-- [Rust](https://www.rust-lang.org/learn/get-started) - a (wonderful) systems programming language
+- [Rust](https://github.com/ufosc/club-resources/tree/master/rust) - a (wonderful) systems programming language
 - [Rocket Framework](https://rocket.rs/) - a web framework for Rust
 - [PostgreSQL](https://www.postgresql.org/) - an open source relational database
 - [Diesel](http://diesel.rs/) - An extensible ORM and Query Builder for Rust (to interact with PostgreSQL)
 
 ## Contributing
 
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) for how to work on the project.
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) for how to work on the project and the [DESIGN.md](docs/DESIGN.md) file to understand more about the technologies we use and how it all fits together.
 
 ## License
 

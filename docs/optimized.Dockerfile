@@ -2,8 +2,8 @@
 FROM rustlang/rust:nightly as dependencies-builder
 
 # Create a new empty shell project
-RUN USER=root cargo new --bin club-backend
-WORKDIR /club-backend
+RUN USER=root cargo new --bin club-back-end
+WORKDIR /club-back-end
 
 # Copy over your manifests
 COPY Cargo.toml Cargo.lock Rocket.toml ./
@@ -20,11 +20,11 @@ COPY ./src ./src
 
 # Build enviroment info
 ENV DATABASE_URL=postgres://osc:stallman@db/osc \
-    ROCKET_ENV=production
+	ROCKET_ENV=production
 
 # Build for release
-RUN rm ./target/release/deps/club_backend*
+RUN rm ./target/release/deps/club_back-end*
 RUN cargo build --release
 
 # Set the startup command to run your binary
-CMD ["/club-backend/target/release/club-backend"]
+CMD ["/club-back-end/target/release/club-back-end"]
