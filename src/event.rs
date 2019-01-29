@@ -3,7 +3,7 @@ use diesel::sql_types::Bytea;
 use diesel::sql_types::Timestamptz;
 
 use super::database;
-use super::schema::event;
+use super::schema::events;
 
 #[derive(Queryable)]
 pub struct Event {
