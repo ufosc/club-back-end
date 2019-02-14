@@ -24,7 +24,7 @@ docker-compose up
 
 > Note: The first time, you might have to add the `--build` flag to the end of the previous command
 
-And go to [localhost:3001](http://localhost:3001/).
+And go to [localhost:3001](http://localhost:3001/) or [192.168.99.100:3001](http://192.168.99.100:3001) if you're using Docker Toolbox on Windows.
 
 To run updated code, you can press "Ctrl-C" in the terminal or type
 
