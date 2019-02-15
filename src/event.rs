@@ -3,11 +3,11 @@ use diesel::sql_types::Bytea;
 use diesel::sql_types::Timestamptz;
 
 use super::database;
-use super::schema::event;
+use super::schema::events;
 use chrono::prelude::*;
 
 #[derive(Insertable, Queryable)]
-#[table_name = "event"]
+#[table_name = "events"]
 pub struct Event {
 	pub start_timestamp: DateTime<Utc>,
 	pub title: String,
@@ -47,7 +47,7 @@ impl Default for Event {
 // Return a list of all events
 pub fn list_events() -> Vec<Event> {
 	let connection = database::establish_connection();
-	let results = event::table
+	let results = events::table
 		.load::<Event>(&connection)
 		.expect("Error loading events");
 	results
@@ -60,7 +60,7 @@ pub fn add_event(title: &str, start_timestamp: DateTime<Utc>, end_timestamp: Dat
 
 	let new_event = Event::new(&title, start_timestamp, end_timestamp);
 
-	diesel::insert_into(event::table)
+	diesel::insert_into(events::table)
 		.values(&new_event)
 		.get_result::<Event>(&connection)
 		.expect("Error saving new event");
@@ -70,7 +70,7 @@ pub fn remove_event(title: &str) {
 	let connection = database::establish_connection();
 
 	let num_deleted =
-		diesel::delete(event::table.filter(event::columns::title.eq(title)))
+		diesel::delete(events::table.filter(events::columns::title.eq(title)))
 			.execute(&connection)
 			.expect("Error deleting members");
 
