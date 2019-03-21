@@ -6,8 +6,9 @@ use super::schema::members;
 /* Struct Setup */
 
 // Struct for interacting with the member table
-#[derive(Insertable, Queryable, Clone)]
+#[derive(Insertable, Queryable, Clone, AsChangeset)]
 #[table_name = "members"]
+#[primary_key(ufl_username)]
 
 pub struct Member {
 	pub ufl_username: String,
@@ -57,9 +58,10 @@ impl Default for Member {
 // Return all members
 pub fn list_members() -> Vec<Member> {
 	let connection = database::establish_connection();
-	members::table
+	let results = members::table
 		.load::<Member>(&connection)
-		.expect("Error loading members")
+		.expect("Error loading members");
+	results
 }
 
 // Add a member with a UFL username
@@ -91,9 +93,10 @@ fn replace_member(username: &str, modifier: &Member) {
 
 	// TODO: Check to handle errors with result
 	let update_result = diesel::update(
-		members::table.filter(members::columns::ufl_username.eq(&username)),
+		members::table
 	)
-	.set(members::columns::first_name.eq(&modifier.first_name))
+	.set(modifier)
+
 	.get_result::<Member>(&connection);
 }
 
@@ -111,6 +114,151 @@ fn modify_first_name(username: &str, string_replace: &str) {
 
 	replace_member(&username, &modifier);
 }
+
+fn modify_last_name(username: &str, string_replace: &str) {
+	let connection = database::establish_connection();
+
+	let temp_member = members::table
+		.filter(members::ufl_username.eq(&username))
+		.load::<Member>(&connection);
+
+	let modifier = Member {
+		last_name: string_replace.to_string(),
+		..temp_member.unwrap()[0].clone()
+	};
+
+	replace_member(&username, &modifier);
+}
+
+fn modify_ufl_username(username: &str, string_replace: &str) {
+	let connection = database::establish_connection();
+
+	let temp_member = members::table
+		.filter(members::ufl_username.eq(&username))
+		.load::<Member>(&connection);
+
+	let modifier = Member {
+		ufl_username: string_replace.to_string(),
+		..temp_member.unwrap()[0].clone()
+	};
+	let update_result = diesel::update(
+		members::table/* .filter(members::columns::ufl_username.eq(&username)),*/
+	)
+	.set(ufl_username.eq(modifier.ufl_username))
+
+	.get_result::<Member>(&connection);
+
+}
+
+fn modify_discord_username(username: &str, string_replace: &str) {
+	let connection = database::establish_connection();
+
+	let temp_member = members::table
+		.filter(members::ufl_username.eq(&username))
+		.load::<Member>(&connection);
+
+	let modifier = Member {
+		discord_username: string_replace.to_string(),
+		..temp_member.unwrap()[0].clone()
+	};
+
+	replace_member(&username, &modifier);
+}
+
+fn modify_github_username(username: &str, string_replace: &str) {
+	let connection = database::establish_connection();
+
+	let temp_member = members::table
+		.filter(members::ufl_username.eq(&username))
+		.load::<Member>(&connection);
+
+	let modifier = Member {
+		github_username: string_replace.to_string(),
+		..temp_member.unwrap()[0].clone()
+	};
+
+	replace_member(&username, &modifier);
+}
+
+fn modify_server_username(username: &str, string_replace: &str) {
+	let connection = database::establish_connection();
+
+	let temp_member = members::table
+		.filter(members::ufl_username.eq(&username))
+		.load::<Member>(&connection);
+
+	let modifier = Member {
+		server_username: string_replace.to_string(),
+		..temp_member.unwrap()[0].clone()
+	};
+
+	replace_member(&username, &modifier);
+}
+
+fn modify_server_key(username: &str, string_replace: &str) {
+	let connection = database::establish_connection();
+
+	let temp_member = members::table
+		.filter(members::ufl_username.eq(&username))
+		.load::<Member>(&connection);
+
+	let modifier = Member {
+		server_key: string_replace.to_string(),
+		..temp_member.unwrap()[0].clone()
+	};
+
+	replace_member(&username, &modifier);
+}
+
+fn modify_infofilledout(username: &str, bool_replace: &bool) {
+	let connection = database::establish_connection();
+
+	let temp_member = members::table
+		.filter(members::ufl_username.eq(&username))
+		.load::<Member>(&connection);
+
+	let modifier = Member {
+		is_info_filled_out: bool_replace.clone(),
+		..temp_member.unwrap()[0].clone()
+	};
+
+	replace_member(&username, &modifier);
+}
+
+fn modify_acmshareable(username: &str, bool_replace: &bool) {
+	let connection = database::establish_connection();
+
+	let temp_member = members::table
+		.filter(members::ufl_username.eq(&username))
+		.load::<Member>(&connection);
+
+	let modifier = Member {
+		is_acm_shareable: bool_replace.clone(),
+		..temp_member.unwrap()[0].clone()
+	};
+
+	replace_member(&username, &modifier);
+}
+
+fn modify_inemaillist(username: &str, bool_replace: &bool) {
+	let connection = database::establish_connection();
+
+	let temp_member = members::table
+		.filter(members::ufl_username.eq(&username))
+		.load::<Member>(&connection);
+
+	let modifier = Member {
+		is_in_email_list: bool_replace.clone(),
+		..temp_member.unwrap()[0].clone()
+	};
+
+	replace_member(&username, &modifier);
+}
+
+
+
+
+
 /* Unit testing */
 
 // Note: Do run the test as `cargo test -- --test-threads=1` to run the database calls in order
@@ -161,24 +309,201 @@ mod tests {
 	}
 
 	#[test]
-	fn modify_member() {
-		clear_table();
+	fn modify_memberFirstName(){
+	clear_table();
 		let connection = database::establish_connection();
 
-		add_member("two_member_test_one@email.com");
-		let new_member = Member {
-			ufl_username: "two_member_test_one@email.com".to_string(),
-			first_name: "test".to_string(),
-			..Default::default()
-		};
+        add_member("modify_memberFirstName@email.com");
 
-		modify_first_name(&new_member.ufl_username, "changed");
 
-		let result = members::table
-			.filter(members::ufl_username.eq("two_member_test_one@email.com"))
-			.load::<Member>(&connection);
-		assert_eq!("changed", result.unwrap()[0].first_name);
+        modify_first_name("modify_memberFirstName@email.com", "changed");
+
+	let result = members::table
+		.filter(members::ufl_username.eq("modify_memberFirstName@email.com"))
+		.load::<Member>(&connection);
+       assert_eq!("changed", result.unwrap()[0].first_name);
+
 	}
 
+	#[test]
+	fn modify_memberLastName(){
+	clear_table();
+		let connection = database::establish_connection();
 
+        add_member("modify_memberLastName@email.com");
+        modify_last_name("modify_memberLastName@email.com", "changed");
+
+	let result = members::table
+		.filter(members::ufl_username.eq("modify_memberLastName@email.com"))
+		.load::<Member>(&connection);
+       assert_eq!("changed", result.unwrap()[0].last_name);
+
+	}
+
+	#[test]
+	fn modify_memberUserName(){
+	clear_table();
+		let connection = database::establish_connection();
+
+        add_member("two_member_test_one@email.com");
+        let new_member = Member {
+			ufl_username:"two_member_test_one@email.com".to_string(),
+			            ..Default::default()
+		};
+
+        modify_ufl_username(&new_member.ufl_username, "changed");
+
+	let result = members::table
+		.filter(members::ufl_username.eq("changed"))
+		.load::<Member>(&connection);
+       assert_eq!("changed", result.unwrap()[0].ufl_username);
+
+	}
+
+	#[test]
+	fn modify_discordUserName(){
+	clear_table();
+		let connection = database::establish_connection();
+
+        add_member("two_member_test_one@email.com");
+        let new_member = Member {
+			ufl_username:"two_member_test_one@email.com".to_string(),
+			discord_username: "test".to_string(),
+			            ..Default::default()
+		};
+
+        modify_discord_username(&new_member.ufl_username, "changed");
+
+	let result = members::table
+		.filter(members::ufl_username.eq("two_member_test_one@email.com"))
+		.load::<Member>(&connection);
+       assert_eq!("changed", result.unwrap()[0].discord_username);
+
+	}
+
+	#[test]
+	fn modify_githubUserName(){
+	clear_table();
+		let connection = database::establish_connection();
+
+        add_member("two_member_test_one@email.com");
+        let new_member = Member {
+			ufl_username:"two_member_test_one@email.com".to_string(),
+			github_username: "test".to_string(),
+			            ..Default::default()
+		};
+
+        modify_github_username(&new_member.ufl_username, "changed");
+
+	let result = members::table
+		.filter(members::ufl_username.eq("two_member_test_one@email.com"))
+		.load::<Member>(&connection);
+       assert_eq!("changed", result.unwrap()[0].github_username);
+
+	}
+
+    #[test]
+	fn modify_serverUserName(){
+	clear_table();
+		let connection = database::establish_connection();
+
+        add_member("two_member_test_one@email.com");
+        let new_member = Member {
+			ufl_username:"two_member_test_one@email.com".to_string(),
+		    server_username: "test".to_string(),
+			            ..Default::default()
+		};
+
+        modify_server_username(&new_member.ufl_username, "changed");
+
+	let result = members::table
+		.filter(members::ufl_username.eq("two_member_test_one@email.com"))
+		.load::<Member>(&connection);
+       assert_eq!("changed", result.unwrap()[0].server_username);
+
+	}
+
+	#[test]
+	fn modify_serverKey(){
+	clear_table();
+		let connection = database::establish_connection();
+
+        add_member("two_member_test_one@email.com");
+        let new_member = Member {
+			ufl_username:"two_member_test_one@email.com".to_string(),
+		    server_key: "test".to_string(),
+			            ..Default::default()
+		};
+
+        modify_server_key(&new_member.ufl_username, "changed");
+
+	let result = members::table
+		.filter(members::ufl_username.eq("two_member_test_one@email.com"))
+		.load::<Member>(&connection);
+       assert_eq!("changed", result.unwrap()[0].server_key);
+
+	}
+
+	#[test]
+	fn modify_info(){
+	clear_table();
+		let connection = database::establish_connection();
+
+        add_member("two_member_test_one@email.com");
+        let new_member = Member {
+			ufl_username:"two_member_test_one@email.com".to_string(),
+		    is_info_filled_out: false,
+			            ..Default::default()
+		};
+
+        modify_infofilledout(&new_member.ufl_username, &true);
+
+	let result = members::table
+		.filter(members::ufl_username.eq("two_member_test_one@email.com"))
+		.load::<Member>(&connection);
+       assert_eq!(true, result.unwrap()[0].is_info_filled_out);
+
+	}
+
+	#[test]
+	fn modify_acm(){
+	clear_table();
+		let connection = database::establish_connection();
+
+        add_member("two_member_test_one@email.com");
+        let new_member = Member {
+			ufl_username:"two_member_test_one@email.com".to_string(),
+		    is_acm_shareable: false,
+			            ..Default::default()
+		};
+
+        modify_acmshareable(&new_member.ufl_username, &true);
+
+	let result = members::table
+		.filter(members::ufl_username.eq("two_member_test_one@email.com"))
+		.load::<Member>(&connection);
+       assert_eq!(true, result.unwrap()[0].is_acm_shareable);
+
+	}
+
+	#[test]
+	fn modify_inemail(){
+	clear_table();
+		let connection = database::establish_connection();
+
+        add_member("two_member_test_one@email.com");
+        let new_member = Member {
+			ufl_username:"two_member_test_one@email.com".to_string(),
+		    is_in_email_list: false,
+			            ..Default::default()
+		};
+
+        modify_inemaillist(&new_member.ufl_username, &true);
+
+	let result = members::table
+		.filter(members::ufl_username.eq("two_member_test_one@email.com"))
+		.load::<Member>(&connection);
+       assert_eq!(true, result.unwrap()[0].is_in_email_list);
+
+	}
 }
