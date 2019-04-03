@@ -88,6 +88,7 @@ pub fn remove_member(ufl_username: &str) {
 	println!("Deleted {} members", num_deleted);
 }
 
+// Replace old member with a modified member
 fn replace_member(username: &str, modifier: &Member) {
 	let connection = database::establish_connection();
 
@@ -100,6 +101,7 @@ fn replace_member(username: &str, modifier: &Member) {
 	.get_result::<Member>(&connection);
 }
 
+// Modify a single member's first name
 fn modify_first_name(username: &str, string_replace: &str) {
 	let connection = database::establish_connection();
 
@@ -115,6 +117,7 @@ fn modify_first_name(username: &str, string_replace: &str) {
 	replace_member(&username, &modifier);
 }
 
+// Modify a single member's last name
 fn modify_last_name(username: &str, string_replace: &str) {
 	let connection = database::establish_connection();
 
@@ -130,26 +133,20 @@ fn modify_last_name(username: &str, string_replace: &str) {
 	replace_member(&username, &modifier);
 }
 
+// Modify a single member's UFL username
 fn modify_ufl_username(username: &str, string_replace: &str) {
 	let connection = database::establish_connection();
 
 	let temp_member = members::table
-		.filter(members::ufl_username.eq(&username))
-		.load::<Member>(&connection);
+		.filter(members::ufl_username.eq(&username));
 
-	let modifier = Member {
-		ufl_username: string_replace.to_string(),
-		..temp_member.unwrap()[0].clone()
-	};
-	let update_result = diesel::update(
-		members::table/* .filter(members::columns::ufl_username.eq(&username)),*/
-	)
-	.set(ufl_username.eq(modifier.ufl_username))
-
-	.get_result::<Member>(&connection);
+	let update_result = diesel::update(temp_member)
+		.set(members::ufl_username.eq(string_replace))
+		.get_result::<Member>(&connection);
 
 }
 
+// Modify a single member's Discord username
 fn modify_discord_username(username: &str, string_replace: &str) {
 	let connection = database::establish_connection();
 
@@ -165,6 +162,7 @@ fn modify_discord_username(username: &str, string_replace: &str) {
 	replace_member(&username, &modifier);
 }
 
+// Modify a single member's Github username
 fn modify_github_username(username: &str, string_replace: &str) {
 	let connection = database::establish_connection();
 
@@ -180,6 +178,7 @@ fn modify_github_username(username: &str, string_replace: &str) {
 	replace_member(&username, &modifier);
 }
 
+// Modify a single member's server username
 fn modify_server_username(username: &str, string_replace: &str) {
 	let connection = database::establish_connection();
 
@@ -195,6 +194,7 @@ fn modify_server_username(username: &str, string_replace: &str) {
 	replace_member(&username, &modifier);
 }
 
+// Modify a single member's server key
 fn modify_server_key(username: &str, string_replace: &str) {
 	let connection = database::establish_connection();
 
@@ -210,6 +210,7 @@ fn modify_server_key(username: &str, string_replace: &str) {
 	replace_member(&username, &modifier);
 }
 
+// Modify a single member's information status
 fn modify_infofilledout(username: &str, bool_replace: &bool) {
 	let connection = database::establish_connection();
 
@@ -225,6 +226,7 @@ fn modify_infofilledout(username: &str, bool_replace: &bool) {
 	replace_member(&username, &modifier);
 }
 
+// Modify a single member's ACM shareability status
 fn modify_acmshareable(username: &str, bool_replace: &bool) {
 	let connection = database::establish_connection();
 
@@ -240,6 +242,7 @@ fn modify_acmshareable(username: &str, bool_replace: &bool) {
 	replace_member(&username, &modifier);
 }
 
+// Modify a single member's email list status
 fn modify_inemaillist(username: &str, bool_replace: &bool) {
 	let connection = database::establish_connection();
 
@@ -308,6 +311,7 @@ mod tests {
 		assert_eq!(Vec::len(&list_members()), 0);
 	}
 
+	// Check that a single member's first name can be modified
 	#[test]
 	fn modify_memberFirstName(){
 	clear_table();
@@ -325,6 +329,7 @@ mod tests {
 
 	}
 
+	// Check that a single member's last name can be modified
 	#[test]
 	fn modify_memberLastName(){
 	clear_table();
@@ -340,6 +345,7 @@ mod tests {
 
 	}
 
+	// Check that a single member's UFL username can be modified
 	#[test]
 	fn modify_memberUserName(){
 	clear_table();
@@ -360,6 +366,7 @@ mod tests {
 
 	}
 
+	// Check that a single member's Discord username can be modified
 	#[test]
 	fn modify_discordUserName(){
 	clear_table();
@@ -381,6 +388,7 @@ mod tests {
 
 	}
 
+	// Check that a single member's Github username can be modified
 	#[test]
 	fn modify_githubUserName(){
 	clear_table();
@@ -402,6 +410,7 @@ mod tests {
 
 	}
 
+	// Check that a single member's server username can be modified
     #[test]
 	fn modify_serverUserName(){
 	clear_table();
@@ -422,7 +431,8 @@ mod tests {
        assert_eq!("changed", result.unwrap()[0].server_username);
 
 	}
-
+	
+	// Check that a single member's server key can be modified
 	#[test]
 	fn modify_serverKey(){
 	clear_table();
@@ -444,6 +454,7 @@ mod tests {
 
 	}
 
+	// Check that a member's information status can be modified
 	#[test]
 	fn modify_info(){
 	clear_table();
@@ -464,7 +475,8 @@ mod tests {
        assert_eq!(true, result.unwrap()[0].is_info_filled_out);
 
 	}
-
+	
+	// Check that a member's ACM shareability status can be modified
 	#[test]
 	fn modify_acm(){
 	clear_table();
@@ -486,6 +498,7 @@ mod tests {
 
 	}
 
+	// Check that a member's email list status can be modified
 	#[test]
 	fn modify_inemail(){
 	clear_table();
