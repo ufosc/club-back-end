@@ -1,13 +1,15 @@
 language: rust
 rust:
-- nightly
+  - nightly
+services:
+  - postgresql
 env:
-- ROCKET_ENV=development
-- DATABASE_URL=postgres://osc:stallman@db/osc
+  - DATABASE_URL=postgres://osc:stallman@db/osc
 before_script:
-- rustup component add rustfmt-preview
+  - rustup component add rustfmt-preview
+  - psql -c 'create database osc;' -U postgres
 script:
-- cargo fmt --all -- --check
-- cargo build
-- cargo test -- --test-threads=1
+  - cargo fmt --all -- --check
+  - cargo build
+  - cargo test -- --test-threads=1
 cache: cargo
