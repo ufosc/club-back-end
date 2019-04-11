@@ -5,7 +5,8 @@ services:
   - postgresql
 env:
   - DATABASE_URL=postgres://osc:stallman@db/osc
-   global:
+env:
+  global:
     - PGPORT=5432
 before_script:
   - psql -c 'create database osc;' -U postgres
