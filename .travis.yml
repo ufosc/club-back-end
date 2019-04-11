@@ -6,9 +6,12 @@ services:
 env:
   - DATABASE_URL=postgres://osc:stallman@db/osc
 before_script:
-  - rustup component add rustfmt-preview
   - psql -c 'create database osc;' -U postgres
+  - psql -c "CREATE USER osc WITH PASSWORD 'stallman';" -U postgres
+  - rustup component add rustfmt-preview
+  - cargo install diesel_cli --no-default-features --features postgres
 script:
+  - bash -c "bash ./wait-for-database.sh db:5432 -q -- diesel setup"
   - cargo fmt --all -- --check
   - cargo build
   - cargo test -- --test-threads=1
