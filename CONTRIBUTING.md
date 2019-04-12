@@ -49,6 +49,7 @@ Use our [.editorconfig](.editorconfig) to help automatically format your code. A
 - Indent with tabs, use spaces everywhere else
 - Put curly braces on a new line
 - Keep line length under 100 characters
+- **Run `cargo fmt` to automatically adhere to some of the Rust styles. The Travis build will fail if you don't.** More info [here](docs/extra-docker-info.md)
 
 For a longer more descriptive list, check out our club's [general style guidelines](https://github.com/ufosc/resources/blob/master/coding-guidelines/general-style.md) and importantly, the [Rust specific guide](https://github.com/ufosc/resources/blob/master/coding-guidelines/rust.md) (which overrules some of the general conventions).
 
