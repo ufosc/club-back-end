@@ -12,7 +12,7 @@ before_script:
   - psql -c "CREATE USER osc WITH PASSWORD 'stallman';" -U postgres
   - rustup component add rustfmt-preview
 # The below command is forced, because the diesel_cli may or may not be installed (do to cacheing) and this prevents it from failing
-  - cargo install --forced diesel_cli --no-default-features --features postgres
+  - cargo install --force diesel_cli --no-default-features --features postgres
 script:
   - bash -c "bash ./wait-for-database.sh db:5432 -q -- diesel setup"
 # Check and fail if user hasn't run cargo fmt
