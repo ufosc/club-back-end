@@ -15,10 +15,10 @@ before_script:
 #  - cargo install diesel_cli --no-default-features --features postgres
 script:
   - bash -c "bash ./wait-for-database.sh db:5432 -q -- diesel setup"
-	# Check and fail if user hasn't run cargo fmt
+# Check and fail if user hasn't run cargo fmt
   - cargo fmt --all -- --check
-	# Check and fail if code doesn't build
+# Check and fail if code doesn't build
   - cargo build
-	# Check and fail if code doesn't pass unit tests
+# Check and fail if code doesn't pass unit tests
   - cargo test -- --test-threads=1
 cache: cargo
