@@ -8,7 +8,7 @@ RUN rustup component add rustfmt
 
 RUN rustup component add clippy
 
-WORKDIR /club-backend
+WORKDIR /club-back-end
 
 EXPOSE 3001
 

@@ -37,7 +37,7 @@ docker-compose up
 and then in a new terminal jump into that containers shell by
 
 ```bash
-docker-compose exec backend bash
+docker-compose exec back-end bash
 ```
 
 From there all normal Diesel or Rust maintenance commands can be run. Please go to the official documentation for details, a list of commonly used commands are below.

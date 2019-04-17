@@ -3,8 +3,7 @@ use diesel::sql_types::Bytea;
 use diesel::sql_types::Timestamptz;
 
 use super::database;
-use super::schema::event;
-use chrono::prelude::*;
+use super::schema::events;
 
 #[derive(Insertable, Queryable)]
 #[table_name = "event"]
