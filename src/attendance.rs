@@ -6,7 +6,7 @@ use super::database;
 use super::schema::attendances;
 
 #[derive(Insertable, Queryable)]
-#[table_name = "attendance"]
+#[table_name = "attendances"]
 pub struct Attendance {
 	pub ufl_username: String,
 	pub start_timestamp: DateTime<Utc>,

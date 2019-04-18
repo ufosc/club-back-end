@@ -92,8 +92,8 @@ pub fn remove_member(ufl_username: &str) {
 pub fn does_member_exist(ufl_username: &str) -> bool {
 	let connection = database::establish_connection();
 
-	let result = member::table
-		.filter(member::ufl_username.eq(&ufl_username))
+	let result = members::table
+		.filter(members::ufl_username.eq(&ufl_username))
 		.load::<Member>(&connection);
 	match result {
 		Ok(v) => {
