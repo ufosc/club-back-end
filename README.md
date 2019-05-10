@@ -4,7 +4,7 @@
 
 A RESTful API for club information (events, projects, sign-ins, etc) that is used for the club website, bots, and any future projects related to administration.
 
-A list of use cases can be found [here](https://github.com/ufosc/club-back-end/issues/2).
+The project goals and roadmap can be found [here](https://github.com/ufosc/club-back-end/issues/28).
 
 ## Getting Started
 
