@@ -49,6 +49,144 @@ impl default for Project {
 
 // CRUD functions
 
+fn replace_project(github_url: &str, modifier: &Project) {
+	let connection = database::establish_connection();
+
+	let update_result = diesel::update(projects::table)
+		.set(modifier)
+		.get_result::<Project>(&connection);
+}
+
+
+fn modify_github_url(projectURL:&str, string_replace: &str)
+{
+let connection = database::establish_connection();
+
+	let temp_project = projects::table
+		.filter(projects::projectURL.eq(&str))
+		.load::<Project>(&connection);
+
+
+
+	let update_result = diesel::update(temp_project)
+		.set(projects::github_url.eq(string_replace))
+		.get_result::<Project>(&connection);
+
+}
+
+
+fn modify_description(projectURL: &str, string_replace: &str)
+{
+
+	let connection = database::establish_connection();
+
+
+	let temp_project = projects::table
+		.filter(projects::projectURL.eq(&str))
+		.load::<Project>(&connection);
+
+	let modifier = Project {
+		description: string_replace.to_string(),
+		..temp_event.unwrap()[0].clone()
+	};
+
+	replace_project(&projectURL, &modifier);
+}
+
+//fn modify_technology()
+//{
+//	
+//}
+
+fn modify_name(projectURL: &str, string_replace: &str)
+{
+
+	let connection = database::establish_connection();
+
+
+	let temp_project = projects::table
+		.filter(projects::projectURL.eq(&str))
+		.load::<Project>(&connection);
+
+	let modifier = Project {
+		name: string_replace.to_string(),
+		..temp_event.unwrap()[0].clone()
+	};
+
+	replace_project(&projectURL, &modifier);
+}
+
+
+fn modify_discord_channel(projectURL: &str, string_replace: &str)
+{
+
+	let connection = database::establish_connection();
+
+	let temp_project = projects::table
+		.filter(projects::projectURL.eq(&str))
+		.load::<Project>(&connection);
+
+	let modifier = Project {
+		discord_channel: string_replace.to_string(),
+		..temp_event.unwrap()[0].clone()
+	};
+
+	replace_project(&projectURL, &modifier);
+}
+
+fn modify_is_active(projectURL: &str, string_replace: &str)
+{
+	let connection = database::establish_connection();
+
+
+	let temp_project = projects::table
+		.filter(projects::projectURL.eq(&str))
+		.load::<Project>(&connection);
+
+	let modifier = Project {
+		is_active: bool_replace.clone(),
+		..temp_event.unwrap()[0].clone()
+	};
+
+	replace_project(&projectURL, &modifier);
+}
+
+fn modify_next_milestone_date(projectURL: &str, milestone_replace: Timestamptz)
+{
+	let connection = database::establish_connection();
+
+
+	let temp_project = projects::table
+		.filter(projects::projectURL.eq(&str))
+		.load::<Project>(&connection);
+
+	let modifier = Project {
+		next_milestone_date: milestone_replace.clone(),
+		..temp_event.unwrap()[0].clone()
+	};
+
+	replace_project(&projectURL, &modifier);
+}
+
+fn modify_image(projectURL: &str, image_replace: Bytea)
+{
+	let connection = database::establish_connection();
+
+
+	let temp_project = projects::table
+		.filter(projects::projectURL.eq(&str))
+		.load::<Project>(&connection);
+
+	let modifier = Project {
+		image: image_replace.clone(),
+		..temp_event.unwrap()[0].clone()
+	};
+
+	replace_project(&projectURL, &modifier);
+}
+
+
+
 // Return all projects
 pub fn list_projects() -> Vec<Project> {
     let connection = database::establish_connection();
@@ -72,7 +210,7 @@ pub fn add_project(github_url: &str) {
 
 // Remove a project by its github URL, don't know if this is necessary, as we'll only ever
 // set it to not active
-pub fn remove_proejct(github_url: &str) {
+pub fn remove_project(github_url: &str) {
     let connection = database::establish_connection();
 
     let num_deleted =
@@ -83,7 +221,93 @@ pub fn remove_proejct(github_url: &str) {
     println!("Deleted {} projects" num_deleted);
 }
 
-// TODO: Be able to find modify a project. Find it by the github_url and let them pass in all the values
-// Note: Might want to consider a way of specfying only certain values to change. Might need a macro or something
+#[cfg(test)]
+mod tests{
 
-// TODO: Add unit tests
+use super::*;
+
+#[test]
+fn test_modify_name() {	
+	clear_table();
+	let connection = database::establish_connection();
+
+        add_project("testproject");
+        
+
+        modify_name("testproject", "changed");
+
+	let result = projects::table
+		.filter(projects::github_url.eq("testproject"))
+		.load::<Project>(&connection);
+       assert_eq!("changed", result.unwrap()[0].name);
+}
+
+#[test]
+fn test_modify_description() {	
+	clear_table();
+	let connection = database::establish_connection();
+
+        add_project("testproject");
+        
+
+        modify_description("testproject", "changed");
+
+	let result = projects::table
+		.filter(projects::github_url.eq("testproject"))
+		.load::<Project>(&connection);
+       assert_eq!("changed", result.unwrap()[0].description);
+}
+
+fn test_modify_discord_channel() {	
+	clear_table();
+	let connection = database::establish_connection();
+
+        add_project("testproject");
+        
+
+        modify_discord_channel("testproject", "changed");
+	let result = projects::table
+		.filter(projects::github_url.eq("testproject"))
+		.load::<Project>(&connection);
+       assert_eq!("changed", result.unwrap()[0].discord_channel);
+
+	
+}
+
+#[test]
+fn test_modify_is_active() {	
+	clear_table();
+		let connection = database::establish_connection();
+
+        add_project("testproject");
+	modify_is_active("testproject", &true);
+
+        let result = projects::table
+		.filter(projects::github_url.eq("testproject"))
+		.load::<Project>(&connection);
+     
+   assert_eq!(true, result.unwrap()[0].is_active);
+
+
+}
+
+#[test]
+fn test_modify_github_url() {	
+	clear_table();
+		let connection = database::establish_connection();
+
+        add_project("testproject");
+	modify_github_url("testproject", "changed");
+
+        let result = projects::table
+		.filter(projects::github_url.eq("changed"))
+		.load::<Project>(&connection);
+     
+   assert_eq!("changed", result.unwrap()[0].github_url);
+
+
+}
+}
+
+
+
