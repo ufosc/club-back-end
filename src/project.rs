@@ -60,17 +60,20 @@ fn replace_project(github_url: &str, modifier: &Project) {
 
 fn modify_github_url(projectURL:&str, string_replace: &str)
 {
-let connection = database::establish_connection();
+
+	let connection = database::establish_connection();
+
 
 	let temp_project = projects::table
 		.filter(projects::projectURL.eq(&str))
 		.load::<Project>(&connection);
 
+	let modifier = Project {
+		github_url: string_replace.to_string(),
+		..temp_project.unwrap()[0].clone()
+	};
 
-
-	let update_result = diesel::update(temp_project)
-		.set(projects::github_url.eq(string_replace))
-		.get_result::<Project>(&connection);
+	replace_project(&projectURL, &modifier);
 
 }
 
@@ -87,16 +90,29 @@ fn modify_description(projectURL: &str, string_replace: &str)
 
 	let modifier = Project {
 		description: string_replace.to_string(),
-		..temp_event.unwrap()[0].clone()
+		..temp_project.unwrap()[0].clone()
 	};
 
 	replace_project(&projectURL, &modifier);
 }
 
-//fn modify_technology()
-//{
-//	
-//}
+  fn modify_technology(projectURL: &str, stringVector_replace: &Vec<String>)
+  {
+	let connection = database::establish_connection();
+
+
+	let temp_project = projects::table
+		.filter(projects::projectURL.eq(&str))
+		.load::<Project>(&connection);
+
+	let modifier = Project {
+		technology: stringVector_replace,
+		..temp_project.unwrap()[0].clone()
+	};
+
+	replace_project(&projectURL, &modifier);
+	
+  }
 
 fn modify_name(projectURL: &str, string_replace: &str)
 {
@@ -110,7 +126,7 @@ fn modify_name(projectURL: &str, string_replace: &str)
 
 	let modifier = Project {
 		name: string_replace.to_string(),
-		..temp_event.unwrap()[0].clone()
+		..temp_project.unwrap()[0].clone()
 	};
 
 	replace_project(&projectURL, &modifier);
@@ -128,7 +144,7 @@ fn modify_discord_channel(projectURL: &str, string_replace: &str)
 
 	let modifier = Project {
 		discord_channel: string_replace.to_string(),
-		..temp_event.unwrap()[0].clone()
+		..temp_project.unwrap()[0].clone()
 	};
 
 	replace_project(&projectURL, &modifier);
@@ -145,7 +161,7 @@ fn modify_is_active(projectURL: &str, string_replace: &str)
 
 	let modifier = Project {
 		is_active: bool_replace.clone(),
-		..temp_event.unwrap()[0].clone()
+		..temp_project.unwrap()[0].clone()
 	};
 
 	replace_project(&projectURL, &modifier);
@@ -162,7 +178,7 @@ fn modify_next_milestone_date(projectURL: &str, milestone_replace: Timestamptz)
 
 	let modifier = Project {
 		next_milestone_date: milestone_replace.clone(),
-		..temp_event.unwrap()[0].clone()
+		..temp_project.unwrap()[0].clone()
 	};
 
 	replace_project(&projectURL, &modifier);
@@ -179,7 +195,7 @@ fn modify_image(projectURL: &str, image_replace: Bytea)
 
 	let modifier = Project {
 		image: image_replace.clone(),
-		..temp_event.unwrap()[0].clone()
+		..temp_project.unwrap()[0].clone()
 	};
 
 	replace_project(&projectURL, &modifier);
